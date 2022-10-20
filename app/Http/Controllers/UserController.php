@@ -64,6 +64,13 @@ class UserController extends Controller
     $users->tipo_usuario = $request->get('tipo_user');
     $users->celular = $request->get('celular');
     $users->password =Hash::make($request->get('password'));
+    if($request->hasFile('imagen')){
+        $imagen= $request->file('imagen');
+        $nombreimagen = date('YmdHis'). "." .$imagen->getClientOriginalExtension();
+        $ruta = public_path('imagenes/');
+        $imagen->move($ruta,$nombreimagen);
+        $users->imagen= $nombreimagen;
+    }
     $users->save();
     $users->codigo_usuario = "GB-".str_pad($users->id,3,0,STR_PAD_LEFT);
     $users->update();
